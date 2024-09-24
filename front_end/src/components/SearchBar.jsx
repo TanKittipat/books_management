@@ -1,10 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useBooksContext } from "../contexts/BooksContext";
+
+// Debounce function
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 
 const SearchBar = () => {
+  const { books, setFilteredBooks } = useBooksContext();
+  const [keyword, setKeyword] = useState("");
+  const debouncedKeyword = useDebounce(keyword, 300); // Debounce for 300ms
+
+  const handleChange = async (e) => {
+    setKeyword(e.target.value);
+  };
+
+  useEffect(() => {
+    if (debouncedKeyword === "") {
+      setFilteredBooks(books);
+    } else {
+      const result = books.filter((book) => {
+        return (
+          book.bookName
+            .toLowerCase()
+            .includes(debouncedKeyword.toLowerCase()) ||
+          book.bookDescription
+            .toLowerCase()
+            .includes(debouncedKeyword.toLowerCase())
+        );
+      });
+      setFilteredBooks(result);
+    }
+  }, [debouncedKeyword, books, setFilteredBooks]);
+
   return (
     <div>
       <label className="input input-bordered flex items-center gap-2 input-sm">
-        <input type="text" className="grow" placeholder="Search" />
+        <input
+          type="text"
+          onChange={handleChange}
+          className="grow"
+          placeholder="Search"
+        />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

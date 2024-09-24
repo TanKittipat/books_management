@@ -19,7 +19,7 @@ const Home = () => {
               curated selection features everything from timeless classics to
               the latest bestsellers, across all genres.
             </p>
-            <a href="/store" className="btn btn-primary">
+            <a href="/store" className="btn btn-outline">
               Go to store
             </a>
           </div>

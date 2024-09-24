@@ -1,7 +1,8 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/autoplay";
+import "swiper/css/effect-fade";
 import book1 from "../assets/backgrounds/book1.jpg";
 import book2 from "../assets/backgrounds/book2.jpg";
 import book3 from "../assets/backgrounds/book3.jpg";
@@ -10,13 +11,15 @@ import book4 from "../assets/backgrounds/book4.jpg";
 const SwiperComponent = () => {
   return (
     <Swiper
-      modules={[Autoplay]}
+      modules={[Autoplay, EffectFade]}
       spaceBetween={0}
       slidesPerView={1}
       autoplay={{
         delay: 10500,
         disableOnInteraction: false,
       }}
+      speed={800}
+      effect="fade"
       onSlideChange={() => console.log("slide change")}
       onSwiper={(swiper) => console.log(swiper)}
     >

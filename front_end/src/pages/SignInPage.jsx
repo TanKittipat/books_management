@@ -46,7 +46,7 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="my-36">
+    <div className="my-48">
       {" "}
       <h1 className="text-4xl font-bold text-center mb-7">Sign in</h1>
       <div className="card bg-base-100 w-full max-w-sm shadow-2xl mx-auto">
