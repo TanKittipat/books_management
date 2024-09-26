@@ -1,16 +1,19 @@
 import React from "react";
 
-const AboutUs = () => {
+const ContactPage = () => {
   return (
     <div>
+      {" "}
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div>
-            <h1 className="text-5xl font-bold">About us!</h1>
+            <h1 className="text-5xl font-bold">Contact info</h1>
             <p className="py-6">
-              Hi I'm Kittipat, the developer of this project. I'm 3rd year
-              student of Nakhon Pathom Rajabhat University.
+              Email : 654259023@webmail.npru.ac.th
               <br />
+              Github : TanKittipat
+              <br />
+              Phone : 000-000-0000
             </p>
             <a href="/store" className="btn btn-secondary">
               Return to the store page
@@ -22,4 +25,4 @@ const AboutUs = () => {
   );
 };
 
-export default AboutUs;
+export default ContactPage;

@@ -8,7 +8,9 @@ const Footer = () => {
           <a href="/aboutus" className="link link-hover">
             About us
           </a>
-          <a className="link link-hover">Contact</a>
+          <a href="/contact" className="link link-hover">
+            Contact
+          </a>
         </nav>
         <aside>
           <p>

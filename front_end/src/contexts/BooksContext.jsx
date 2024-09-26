@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import BookServices from "../services/books.service";
+import Swal from "sweetalert2";
 
 export const BooksContext = createContext();
 export const BooksProvider = ({ children }) => {
@@ -30,6 +31,14 @@ export const BooksProvider = ({ children }) => {
       const response = await BookServices.addBook(book);
       if (response.status === 200) {
         setBooks((prev) => [...prev, response.data]);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Add new book",
+          text: response.data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -49,6 +58,14 @@ export const BooksProvider = ({ children }) => {
             }
           })
         );
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Update a book",
+          text: response.data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
       fetchBook();
     } catch (error) {
@@ -60,7 +77,24 @@ export const BooksProvider = ({ children }) => {
     try {
       const response = await BookServices.deleteBook(id);
       if (response.status === 200) {
-        setBooks((prev) => prev.filter((book) => book.id !== id));
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#D91656",
+          cancelButtonColor: "#B7B7B7",
+          confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setBooks((prev) => prev.filter((book) => book.id !== id));
+            Swal.fire({
+              title: "Deleted!",
+              text: response.data.message,
+              icon: "success",
+            });
+          }
+        });
       }
     } catch (error) {
       console.log(error);

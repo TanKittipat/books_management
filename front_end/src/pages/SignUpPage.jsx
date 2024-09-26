@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
 import AuthServices from "../services/auth.service";
+import Swal from "sweetalert2";
 
 const SignUpPage = () => {
   const [user, setUser] = useState({
@@ -38,6 +39,14 @@ const SignUpPage = () => {
       );
       if (register.status === 200) {
         setUser({ username: "", email: "", password: "" });
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Register",
+          text: register.data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
         navigate("/signin");
       }
     } catch (error) {

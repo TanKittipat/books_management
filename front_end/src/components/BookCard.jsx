@@ -1,8 +1,9 @@
 import React from "react";
 import { useBooksContext } from "../contexts/BooksContext";
 import { useAuthContext } from "../contexts/AuthContext";
+import { format } from "date-fns";
 
-const BookCard = ({ id, img, name, genre, price, status, description }) => {
+const BookCard = ({ book }) => {
   const { deleteTheBook } = useBooksContext();
   const { user } = useAuthContext();
 
@@ -24,33 +25,43 @@ const BookCard = ({ id, img, name, genre, price, status, description }) => {
         id="bookCard"
       >
         <figure className="px-10 pt-10" id="img">
-          <img src={img} className="transition-transform h-44 object-cover" />
+          <img
+            src={book.bookImg}
+            className="transition-transform h-44 object-cover"
+          />
         </figure>
         <div className="card-body h-72">
-          <h2 className="card-title">{name}</h2>
-          <p>{truncateDescription(description, 60)}</p>
-          <p>genre : {genre}</p>
-          <p>price : {price}฿</p>
+          <h2 className="card-title">{book.bookName}</h2>
+          <p>{truncateDescription(book.bookDescription, 60)}</p>
+          <p>genre : {book.category}</p>
+          <p>price : {book.bookPrices}฿</p>
           <p>
             status :{" "}
             <span
               className={
-                status === "available" ? "text-emerald-700" : "text-red-700"
+                book.bookStatus === "available"
+                  ? "text-emerald-700"
+                  : "text-red-700"
               }
             >
               {" "}
-              {status}
+              {book.bookStatus}
             </span>
           </p>
           <div className="card-actions mt-3 justify-end">
-            {user && user.roles.includes("ROLES_USER") && (
-              <button className="btn btn-success btn-sm">Buy this Book</button>
-            )}
+            <button
+              onClick={() =>
+                document.getElementById(`modal_${book.id}`).showModal()
+              }
+              className="btn btn-success btn-sm"
+            >
+              View details
+            </button>
             {user &&
               (user.roles.includes("ROLES_ADMIN") ||
                 user.roles.includes("ROLES_MODERATOR")) && (
                 <a
-                  href={`/updatebook/${id}`}
+                  href={`/updatebook/${book.id}`}
                   className="btn btn-warning btn-sm"
                 >
                   <svg
@@ -66,7 +77,7 @@ const BookCard = ({ id, img, name, genre, price, status, description }) => {
               )}
             {user && user.roles.includes("ROLES_ADMIN") && (
               <button
-                onClick={() => handleDelete(id)}
+                onClick={() => handleDelete(book.id)}
                 className="btn btn-error btn-sm"
               >
                 <svg
@@ -86,6 +97,51 @@ const BookCard = ({ id, img, name, genre, price, status, description }) => {
           </div>
         </div>
       </div>
+      <dialog id={`modal_${book.id}`} className="modal">
+        <div className="modal-box w-11/12 max-w-4xl">
+          <div className="flex flex-row space-x-6">
+            <img className="h-60 w-auto object-cover" src={book.bookImg} alt="" />
+            <div>
+              <h1 className="text-2xl font-bold">{book.bookName}</h1>
+              <p className="text-lg">{book.bookDescription}</p>
+              <div className="flex flex-row mt-3">
+                <div className="flex-1">
+                  <p>
+                    Printing date :{" "}
+                    {format(new Date(book.printingDate), "MMMM d, yyyy")}
+                  </p>
+                  <p>Publisher : {book.publisher}</p>
+                  <p>In stock : {book.quantity}</p>
+                  <p>
+                    Status :{" "}
+                    <span
+                      className={
+                        book.bookStatus === "available"
+                          ? "text-emerald-700"
+                          : "text-red-700"
+                      }
+                    >
+                      {" "}
+                      {book.bookStatus}
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <p>Prices : {book.bookPrices}฿</p>
+                  <p>Pages : {book.pages}</p>
+                  <p>genre : {book.category}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button, it will close the modal */}
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AuthServices from "../services/auth.service";
+import Swal from "sweetalert2";
 
 const SignInPage = () => {
   const [user, setUser] = useState({
@@ -37,6 +38,15 @@ const SignInPage = () => {
       if (currentUser.status === 200) {
         login(currentUser.data);
         setUser({ username: "", password: "" });
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Login",
+          text:
+            currentUser.data.message || "The user has successfully logged in.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         navigate("/store");
       }
     } catch (error) {

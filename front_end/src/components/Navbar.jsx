@@ -29,7 +29,7 @@ const Navbar = () => {
       <div className="navbar-end gap-2">
         <SearchBar />
         {user ? (
-          <ProfileDrop logout={logout} />
+          <ProfileDrop user={user} logout={logout} />
         ) : (
           <div className="space-x-2">
             <a href="/signin" className="btn btn-ghost">

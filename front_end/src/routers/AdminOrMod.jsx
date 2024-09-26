@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
 
-const AdminOrMod = () => {
+const AdminOrMod = ({ children }) => {
   const { user } = useAuthContext();
   if (!user) {
     return <Navigate to="/signin" />;

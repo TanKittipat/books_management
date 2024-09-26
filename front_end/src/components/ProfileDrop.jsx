@@ -1,56 +1,96 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-
-const ProfileDrop = ({ logout }) => {
+const ProfileDrop = ({ logout, user }) => {
   const handleLogout = () => {
     logout();
   };
 
+  const concealedText = (str, start, end) => {
+    if (
+      !str ||
+      start < 0 ||
+      start > str.length ||
+      end < 0 ||
+      end > str.length ||
+      start > end
+    ) {
+      return str;
+    }
+    const maskedStr =
+      str.substring(0, start) + "*".repeat(20) + str.substring(end);
+    return maskedStr;
+  };
+
+  const profilePic =
+    "https://images.unsplash.com/photo-1535076766578-839cd64d7a73?q=80&w=2038&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
   return (
     <div>
       {" "}
-      <Menu as="div" className="relative ml-3">
-        <div>
-          <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-            <span className="absolute -inset-1.5" />
-            <span className="sr-only">Open user menu</span>
-            <img
-              alt=""
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              className="h-8 w-8 rounded-full"
-            />
-          </MenuButton>
-        </div>
-        <MenuItems
-          transition
-          className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+      <div className="dropdown dropdown-end">
+        <div
+          tabIndex={0}
+          role="button"
+          className="btn btn-ghost btn-circle avatar"
         >
-          <MenuItem>
+          <div className="w-9 rounded-full">
+            <img alt="Tailwind CSS Navbar component" src={profilePic} />
+          </div>
+        </div>
+        <ul
+          tabIndex={0}
+          className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+        >
+          <li>
             <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+              onClick={() =>
+                document.getElementById(`modal_profile`).showModal()
+              }
+              className="justify-between"
             >
-              Your Profile
+              Profile
             </a>
-          </MenuItem>
-          <MenuItem>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-            >
-              Settings
-            </a>
-          </MenuItem>
-          <MenuItem>
-            <a
-              onClick={handleLogout}
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-            >
-              Sign out
-            </a>
-          </MenuItem>
-        </MenuItems>
-      </Menu>
+          </li>
+          <li>
+            <a onClick={handleLogout}>Logout</a>
+          </li>
+        </ul>
+      </div>
+      <dialog id={`modal_profile`} className="modal">
+        <div className="modal-box w-11/12 max-w-4xl">
+          <div className="flex flex-row space-x-10">
+            <img
+              src={profilePic}
+              className="w-56 h-56 object-cover rounded-full"
+              alt=""
+            />
+            <div className="my-12">
+              <h1 className="text-xl font-semibold">
+                Username : {user.username}
+              </h1>
+              <h1 className="text-xl font-semibold">Email : {user.email}</h1>
+              <h1 className="text-xl font-semibold">
+                AccessToken :{" "}
+                {concealedText(
+                  user.accessToken,
+                  3,
+                  user.accessToken.length - 3
+                )}
+              </h1>
+              <h1 className="text-xl font-semibold">
+                Roles :{" "}
+                <span className="text-emerald-700">
+                  {user?.roles.map((role) => role).join(", ")}
+                </span>
+              </h1>
+            </div>
+          </div>
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button, it will close the modal */}
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
